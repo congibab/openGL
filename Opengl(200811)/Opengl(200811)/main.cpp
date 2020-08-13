@@ -7,6 +7,7 @@
 #include <GL/freeglut.h>
 
 #include <iostream>
+#include "common.h"
 
 using namespace std;
 
@@ -89,9 +90,9 @@ void display(void)
 	glEnableVertexAttribArray(attribute_coord2d);
 	GLfloat triangle_vertices[] =
 	{
-		0.8,  0.8,
-	   -0.8, -0.8,
-		0.8, -0.8,
+		0.8f,  0.8f,
+	   -0.8f, -0.8f,
+		0.8f, -0.8f,
 	};
 
 	glVertexAttribPointer(
@@ -107,7 +108,43 @@ void display(void)
 
 	glDisableVertexAttribArray(attribute_coord2d);
 	glutSwapBuffers();
+}
+
+void display2()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
 	
+
+	for (int i = 0; i < 10; i++)
+	{
+		glColor3f(0.5, 0.5, 0.5);
+		for (int j = 0; j < 10; j++)
+		{
+			glBegin(GL_LINE_LOOP);
+			glVertex3f(i*0.2-0.2 -1.0, j*0.2-0.2 -1.0, 0);
+			glVertex3f(i*0.2+0.2 -1.0, j*0.2-0.2 -1.0, 0);
+			glVertex3f(i*0.2+0.2 -1.0, j*0.2+0.2 -1.0, 0);
+			glVertex3f(i*0.2-0.2 -1.0, j*0.2+0.2 -1.0, 0);
+			glEnd();
+		}
+	}
+	//glColor3f(0.5, 0.5, 0.5);
+	//
+	//glBegin(GL_LINE_LOOP);
+	//glVertex3f(-0.5, -0.5, 0);
+	//glVertex3f(0.5, -0.5, 0);
+	//glVertex3f(0.5, 0.5, 0);
+	//glVertex3f(-0.5, 0.5, 0);
+	//glEnd();
+
+	//glBegin(GL_LINE_LOOP);
+	//glVertex3f(0.5, -0.5, 0);
+	//glVertex3f(1.5, -0.5, 0);
+	//glVertex3f(1.5, 0.5, 0);
+	//glVertex3f(0.5, 0.5, 0);
+	//glEnd();
+
+	glFlush();
 }
 
 void free_resource()
@@ -130,26 +167,31 @@ int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	glutInitContextVersion(2, 0);
-	glutInitDisplayMode(GLUT_RGBA |GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(300, 300);
+	glutInitDisplayMode(GLUT_RGBA);
+	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(1200, 100);
 	glutCreateWindow("open GL");
 	
-	GLenum glew_status = glewInit();
-	if (glew_status != GLEW_OK)
-	{
-		cout << "Error:" << glewGetErrorString(glew_status) << endl;
-		return 1;
-	}
+	glutDisplayFunc(display2);
+	glutReshapeFunc(Reshape);
+	glutMainLoop();
 
-	if (Init_resources())
-	{
-		glutDisplayFunc(display);
-		glutReshapeFunc(Reshape);
-		glutMainLoop();
-	}
+	//GLenum glew_status = glewInit();
+	//if (glew_status != GLEW_OK)
+	//{
+	//	cout << "Error:" << glewGetErrorString(glew_status) << endl;
+	//	return 1;
+	//}
+	//Common c;
 
-	free_resource();
+	//if (Init_resources())
+	//{
+	//	glutDisplayFunc(display);
+	//	glutReshapeFunc(Reshape);
+	//	glutMainLoop();
+	//}
+
+	//free_resource();
 	return 0;
 
 }
