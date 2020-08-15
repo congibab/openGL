@@ -1,11 +1,14 @@
-#include <stdio.h>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <glm/glm.hpp>
-
+#include <FreeImage.h>
 #include <iostream>
 
+#include "TextureManager.h"
+
 using namespace std;
+
+TextureManager texturemanager;
 
 GLfloat off_set_x = 0;
 GLfloat off_set_y = 0;
@@ -14,24 +17,45 @@ GLfloat camera_x = 0;
 GLfloat camera_y = 0;
 
 
+
+
 void display()
 {
-	glLineWidth(1.0);
+	GLuint textureid = texturemanager.CreateTexture("dice_texture.png");
+	GLuint textureid1 = texturemanager.CreateTexture("larst.png");
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureid);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3d(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex2d(0, 0);
+	glTexCoord2f(0, 1); glVertex2d(0, 10);
+	glTexCoord2f(1, 1); glVertex2d(10, 10);
+	glTexCoord2f(1, 0); glVertex2d(10, 0);
+	glEnd();
 
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{	
-			glBegin(GL_LINE_LOOP);
-			glVertex2d(i - 0.5 - off_set_x, j + 0.5 - off_set_y);
-			glVertex2d(i - 0.5 - off_set_x, j - 0.5 - off_set_y);
-			glVertex2d(i + 0.5 - off_set_x, j - 0.5 - off_set_y);
-			glVertex2d(i + 0.5 - off_set_x, j + 0.5 - off_set_y);
-			glEnd();
-		}
-	}
+	glBindTexture(GL_TEXTURE_2D, textureid1);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex2d(10, 10);
+	glTexCoord2f(0, 1); glVertex2d(10, 20);
+	glTexCoord2f(1, 1); glVertex2d(20, 20);
+	glTexCoord2f(1, 0); glVertex2d(20, 10);
+	glEnd();
+
+	//for (int i = 0; i < 20; i++)
+	//{
+	//	for (int j = 0; j < 20; j++)
+	//	{	
+	//		glBegin(GL_LINE_LOOP);
+	//		glVertex2d(i - 0.5 - off_set_x, j + 0.5 - off_set_y);
+	//		glVertex2d(i - 0.5 - off_set_x, j - 0.5 - off_set_y);
+	//		glVertex2d(i + 0.5 - off_set_x, j - 0.5 - off_set_y);
+	//		glVertex2d(i + 0.5 - off_set_x, j + 0.5 - off_set_y);
+	//		glEnd();
+	//	}
+	//}
+
+	glDisable(GL_TEXTURE_2D);
 	glFinish();
 }
 
@@ -40,8 +64,8 @@ void reshape(GLint w, GLint h)
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//glOrtho(0.0, 40.0, 0.0, 40.0, -1.0, 1.0);
-	glOrtho(-w / 50.0, w / 50.0, -h / 50.0, h / 50.0, -1.0, 1.0);
+	glOrtho(0.0, w / 25, 0.0, h / 25, -1.0, 1.0);
+	//glOrtho(-w / 50.0, w / 50.0, -h / 50.0, h / 50.0, -1.0, 1.0);
 	
 	cout << "width:" << w << " height:" << h << endl;
 }
@@ -59,25 +83,21 @@ void keyboard(unsigned char key, int x, int y)
 	case 'A':
 		off_set_x += 0.5;
 		glutPostRedisplay();
-		cout << "Input key a" << endl;
 		break;
 	case 'd':
 	case 'D':
 		off_set_x -= 0.5;
 		glutPostRedisplay();
-		cout << "Input key d" << endl;
 		break;
 	case 'w':
 	case 'W':
 		off_set_y -= 0.5;
 		glutPostRedisplay();
-		cout << "Input key w" << endl;
 		break;
 	case 's':
 	case 'S':
 		off_set_y += 0.5;
 		glutPostRedisplay();
-		cout << "Input key s" << endl;
 		break;
 	//--------------------------------
 	case 27:
@@ -87,6 +107,8 @@ void keyboard(unsigned char key, int x, int y)
 	default:
 		break;
 	}
+	cout << "off_set (" << off_set_x << " , " << off_set_y << ")" << endl;
+
 }
 
 void init()
