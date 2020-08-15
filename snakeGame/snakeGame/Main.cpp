@@ -4,6 +4,7 @@
 #include <FreeImage.h>
 #include <iostream>
 
+
 #include "TextureManager.h"
 
 using namespace std;
@@ -21,25 +22,31 @@ GLfloat camera_y = 0;
 
 void display()
 {
-	GLuint textureid = texturemanager.CreateTexture("dice_texture.png");
-	GLuint textureid1 = texturemanager.CreateTexture("larst.png");
+
+	GLuint textureid = texturemanager.LoadGLTextures("dice_texture.png");
+	GLuint test = texturemanager.LoadGLTextures("test.png");
+	GLuint test1 = texturemanager.LoadGLTextures("opengl.jpg");
 	
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureid);
+	glBindTexture(GL_TEXTURE_2D, test);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POLYGON);
 	glTexCoord2f(0, 0); glVertex2d(0, 0);
 	glTexCoord2f(0, 1); glVertex2d(0, 10);
 	glTexCoord2f(1, 1); glVertex2d(10, 10);
 	glTexCoord2f(1, 0); glVertex2d(10, 0);
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, textureid1);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureid);
 	glBegin(GL_POLYGON);
 	glTexCoord2f(0, 0); glVertex2d(10, 10);
 	glTexCoord2f(0, 1); glVertex2d(10, 20);
 	glTexCoord2f(1, 1); glVertex2d(20, 20);
 	glTexCoord2f(1, 0); glVertex2d(20, 10);
+	glDisable(GL_TEXTURE_2D);
+
 	glEnd();
 
 	//for (int i = 0; i < 20; i++)
@@ -55,7 +62,6 @@ void display()
 	//	}
 	//}
 
-	glDisable(GL_TEXTURE_2D);
 	glFinish();
 }
 
