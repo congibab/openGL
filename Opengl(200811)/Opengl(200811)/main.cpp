@@ -8,114 +8,50 @@
 
 #include <iostream>
 #include "common.h"
+#include "TextureManager.h"
 
 using namespace std;
 
-GLuint program;
-GLint attribute_coord2d;
+float x_pos = 0.0f;
+float y_pos = 0.0f;
 
-int Init_resources()
+TextureManager tex;
+
+void display()
 {
-	GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
-	
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	const char* vs_source=
-	
-	#ifdef GL_ES_VERSION_2_0
-		"#version 100\n"  // OpenGL ES 2.0
-	#else
-		"#version 120\n"  // OpenGL 2.1
-	#endif
-			"attribute vec2 coord2d;                  "
-			"void main(void) {                        "
-			"  gl_Position = vec4(coord2d, 0.0, 1.0); "
-			"}";
-	glShaderSource(vs, 1, &vs_source, NULL);
-	glCompileShader(vs);
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &compile_ok);
-	if (!compile_ok)
-	{
-		cout << "Error iin vertex shadder" << endl;
-		return 0;
-	}
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	const char *fs_source =
+	GLuint img = tex.LoadGLTextures("opengl.jpg");
+	GLuint img1 = tex.LoadGLTextures("maitetsu.jpg");
 
-	#ifdef GL_ES_VERSION_2_0
-			"#version 100\n"  // OpenGL ES 2.0
-	#else
-			"#version 120\n"  // OpenGL 2.1
-	#endif
-			"void main(void) {        "
-			"  gl_FragColor[0] = 0.0; "
-			"  gl_FragColor[1] = 0.0; "
-			"  gl_FragColor[2] = 1.0; "
-			"}";
-	glShaderSource(fs, 1, &fs_source, NULL);
-	glCompileShader(fs);
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &compile_ok);
-	if (!compile_ok)
-	{
-		cout << "Error iin vertex shadder" << endl;
-		return 0;
-	}
-
-	program = glCreateProgram();
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-	glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
-	if (!link_ok)
-	{
-		cout << "glLinkProgram:";
-		return 0;
-	}
-
-	const char* attribute_name = "coord2d";
-	attribute_coord2d = glGetAttribLocation(program, attribute_name);
-	if (attribute_coord2d == -1)
-	{
-		cout << "Could not bind attribute" << attribute_name << endl;
-		return 0;
-	}
-	return 1;
-}
-
-void display(void)
-{
-	glClearColor(1.0, 1.0, 1.0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glUseProgram(program);
-	glEnableVertexAttribArray(attribute_coord2d);
-	GLfloat triangle_vertices[] =
-	{
-		0.8f,  0.8f,
-	   -0.8f, -0.8f,
-		0.8f, -0.8f,
-	};
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(x_pos, y_pos, 1,
+			  x_pos, y_pos, 0,
+				0, 1, 0);
 
-	glVertexAttribPointer(
-		attribute_coord2d,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		triangle_vertices
-	);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, img1);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex2d(-5, -10);
+	glTexCoord2f(0, 1); glVertex2d(-5, 10);
+	glTexCoord2f(1, 1); glVertex2d(5, 10);
+	glTexCoord2f(1, 0); glVertex2d(5, -10);
+	glDisable(GL_TEXTURE_2D);
+	glEnd();
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	glDisableVertexAttribArray(attribute_coord2d);
-	glutSwapBuffers();
-}
+	//glEnable(GL_TEXTURE_2D);
+	//glBindTexture(GL_TEXTURE_2D, img);
+	//glBegin(GL_QUADS);
+	//glTexCoord2f(0, 0); glVertex2d(4, 4);
+	//glTexCoord2f(0, 1); glVertex2d(4, 6);
+	//glTexCoord2f(1, 1); glVertex2d(6, 6);
+	//glTexCoord2f(1, 0); glVertex2d(6, 4);
+	//glDisable(GL_TEXTURE_2D);
+	//glEnd();
 
-void display2()
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-	
 
-	for (int i = 0; i < 10; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
 		glColor3f(0.5, 0.5, 0.5);
 		for (int j = 0; j < 10; j++)
@@ -127,29 +63,53 @@ void display2()
 			glVertex3f(i*0.2-0.2 -1.0, j*0.2+0.2 -1.0, 0);
 			glEnd();
 		}
-	}
-	//glColor3f(0.5, 0.5, 0.5);
-	//
-	//glBegin(GL_LINE_LOOP);
-	//glVertex3f(-0.5, -0.5, 0);
-	//glVertex3f(0.5, -0.5, 0);
-	//glVertex3f(0.5, 0.5, 0);
-	//glVertex3f(-0.5, 0.5, 0);
-	//glEnd();
-
-	//glBegin(GL_LINE_LOOP);
-	//glVertex3f(0.5, -0.5, 0);
-	//glVertex3f(1.5, -0.5, 0);
-	//glVertex3f(1.5, 0.5, 0);
-	//glVertex3f(0.5, 0.5, 0);
-	//glEnd();
-
+	}*/
 	glFlush();
 }
 
-void free_resource()
+void keyboard(unsigned char key, int x, int y)
 {
-	glDeleteProgram(program);
+	switch (key)
+	{
+	case 'q':
+	case 'Q':
+		cout << "Input key q" << endl;
+		break;
+		//================================
+	case 'a':
+	case 'A':
+		x_pos += 0.1f;
+		glutPostRedisplay();
+		cout << "off_set (" << x_pos << " , " << y_pos << ")" << endl;
+
+		break;
+	case 'd':
+	case 'D':
+		x_pos -= 0.1f;
+		glutPostRedisplay();
+		cout << "off_set (" << x_pos << " , " << y_pos << ")" << endl;
+		break;
+	case 'w':
+	case 'W':
+		y_pos -= 0.1f;
+		glutPostRedisplay();
+		cout << "off_set (" << x_pos << " , " << y_pos << ")" << endl;
+		break;
+	case 's':
+	case 'S':
+		y_pos += 0.1f;
+		glutPostRedisplay();
+		cout << "off_set (" << x_pos << " , " << y_pos << ")" << endl;
+		break;
+		//--------------------------------
+	case 27:
+		cout << "Input key Esc" << endl;
+		exit(0);
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Reshape(int NewWidth, int NewHeight)
@@ -160,7 +120,7 @@ void Reshape(int NewWidth, int NewHeight)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(-1.0*WidthFactor, 1.0*WidthFactor, -1.0* HeightFactor, 1.0 * HeightFactor, -1.0, 1.0);
-
+	
 }
 
 int main(int argc, char* argv[])
@@ -172,26 +132,13 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition(1200, 100);
 	glutCreateWindow("open GL");
 	
-	glutDisplayFunc(display2);
+	glutDisplayFunc(display);
 	glutReshapeFunc(Reshape);
+	glutKeyboardFunc(keyboard);
+	
+
 	glutMainLoop();
 
-	//GLenum glew_status = glewInit();
-	//if (glew_status != GLEW_OK)
-	//{
-	//	cout << "Error:" << glewGetErrorString(glew_status) << endl;
-	//	return 1;
-	//}
-	//Common c;
-
-	//if (Init_resources())
-	//{
-	//	glutDisplayFunc(display);
-	//	glutReshapeFunc(Reshape);
-	//	glutMainLoop();
-	//}
-
-	//free_resource();
 	return 0;
 
 }

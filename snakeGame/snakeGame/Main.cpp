@@ -17,27 +17,27 @@ GLfloat off_set_y = 0;
 GLfloat camera_x = 0;
 GLfloat camera_y = 0;
 
-
-
+GLuint textureid;
+GLuint test;
+GLuint test1;
 
 void display()
 {
 
-	GLuint textureid = texturemanager.LoadGLTextures("dice_texture.png");
-	GLuint test = texturemanager.LoadGLTextures("test.png");
-	GLuint test1 = texturemanager.LoadGLTextures("opengl.jpg");
-	
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, test);
+
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, test1);
 	glBegin(GL_POLYGON);
 	glTexCoord2f(0, 0); glVertex2d(0, 0);
 	glTexCoord2f(0, 1); glVertex2d(0, 10);
 	glTexCoord2f(1, 1); glVertex2d(10, 10);
 	glTexCoord2f(1, 0); glVertex2d(10, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
-
 	glEnd();
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureid);
 	glBegin(GL_POLYGON);
@@ -45,6 +45,7 @@ void display()
 	glTexCoord2f(0, 1); glVertex2d(10, 20);
 	glTexCoord2f(1, 1); glVertex2d(20, 20);
 	glTexCoord2f(1, 0); glVertex2d(20, 10);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 
 	glEnd();
@@ -113,13 +114,14 @@ void keyboard(unsigned char key, int x, int y)
 	default:
 		break;
 	}
-	cout << "off_set (" << off_set_x << " , " << off_set_y << ")" << endl;
-
 }
 
 void init()
 {
 	glClearColor(1.0, 1.0, 1.0, 0);
+	textureid = texturemanager.CreateTexture("maitetsu.jpg");
+	test = texturemanager.LoadGLTextures("maitetsu.jpg");
+	test1 = texturemanager.LoadGLTextures("opengl.jpg");
 }
 
 int main(int argc, char *argv[])
