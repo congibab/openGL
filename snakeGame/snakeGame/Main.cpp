@@ -15,7 +15,7 @@
 using namespace std;
 
 Vector2D _pos = {5, 5};
-Vector2D _direction;
+Vector2D _direction = { 1, 0 };
 
 TextureManager texturemanager;
 player Player;
@@ -79,10 +79,6 @@ void display()
 	Player.draw();
 	
 	glPopMatrix();
-
-
-	cout << "display" << endl;
-
 }
 
 void reshape(GLint w, GLint h)
@@ -109,17 +105,17 @@ void keyboard(unsigned char key, int x, int y)
 	//================================
 	case 'a':
 	case 'A':
-		_pos.x -= 1.0f;
+		//_pos.x -= 1.0f;
 		_direction = {-1, 0};
 		break;
 	case 'd':
 	case 'D':
-		_pos.x += 1.0f;
+		//_pos.x += 1.0f;
 		_direction = { 1, 0 };
 		break;
 	case 'w':
 	case 'W':
-		_pos.y += 1.0f;
+		//_pos.y += 1.0f;
 		_direction = { 0, 1 };
 		break;
 	case 's':
@@ -150,8 +146,13 @@ void Idle()
 
 void Timer(int value)
 {
-	cout << "test" << endl;
-	glutTimerFunc(500, Timer, 0);
+	//cout << "test" << endl;
+	_pos.x += _direction.x;
+	_pos.y += _direction.y;
+	Player.Setvector2D(_pos);
+	
+	glutPostRedisplay();
+	glutTimerFunc(100, Timer, 0);
 }
 
 void init()
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(keyboard);
 	glutReshapeFunc(reshape);
-	glutTimerFunc(500, Timer, 0);
+	glutTimerFunc(100, Timer, 0);
 	
 	glutMainLoop();
 
