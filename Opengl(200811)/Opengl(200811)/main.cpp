@@ -16,13 +16,13 @@ float x_pos = 0.0f;
 float y_pos = 0.0f;
 
 TextureManager tex;
-
+GLuint img;
+GLuint img1;
 void display()
 {
-	GLuint img = tex.LoadGLTextures("opengl.jpg");
-	GLuint img1 = tex.LoadGLTextures("maitetsu.jpg");
-
+	
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(x_pos, y_pos, 1,
@@ -123,8 +123,15 @@ void Reshape(int NewWidth, int NewHeight)
 	
 }
 
+void init()
+{
+	img = tex.LoadGLTextures("opengl.jpg");
+	img1 = tex.LoadGLTextures("maitetsu.jpg");
+}
+
 int main(int argc, char* argv[])
 {
+
 	glutInit(&argc, argv);
 	glutInitContextVersion(2, 0);
 	glutInitDisplayMode(GLUT_RGBA);
@@ -135,7 +142,7 @@ int main(int argc, char* argv[])
 	glutDisplayFunc(display);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(keyboard);
-	
+	init();
 
 	glutMainLoop();
 
