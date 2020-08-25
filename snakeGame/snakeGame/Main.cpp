@@ -174,8 +174,6 @@ void init()
 	/*textureid[0] = texturemanager.CreateTexture("larst.png");
 	textureid[1] = texturemanager.CreateTexture("maitetsu.jpg");
 	textureid[2] = texturemanager.LoadGLTextures("opengl.jpg");*/
-
-
 }
 
 int main(int argc, char *argv[])
