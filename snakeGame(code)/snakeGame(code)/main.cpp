@@ -66,7 +66,7 @@ void displayFunc()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glPushMatrix();
+	//glPushMatrix();
 	//glTranslatef(0.3f, 0.3f, 0.0f);
 	game.draw();
 

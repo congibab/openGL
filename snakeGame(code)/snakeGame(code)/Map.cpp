@@ -22,16 +22,7 @@ void Map::Init()
 
 void Map::update()
 {
-	for (int j = 0; j < column; j++)
-	{
-		for (int i = 0; i < row; i++)
-		{
-			std::cout << stage[i][j];
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-
+	
 }
 
 void Map::draw()
@@ -40,8 +31,8 @@ void Map::draw()
 	{
 		for (int i = 0; i < row; i++)
 		{
-			if (i == 0 || i == (row - 1) ||
-				j == 0 || j == (column - 1))
+			if (i == 0 || i == (row-1) ||
+				j == 0 || j == (column-1))
 			{
 				glBegin(GL_POLYGON);
 				glColor3d(1.0, 0.0, 0.0);
@@ -52,7 +43,7 @@ void Map::draw()
 				glBegin(GL_LINE_LOOP);
 				glColor3d(1.0, 1.0, 1.0);
 			}
-
+			
 			glVertex2d(i - 0.5, j + 0.5);
 			glVertex2d(i - 0.5, j - 0.5);
 			glVertex2d(i + 0.5, j - 0.5);

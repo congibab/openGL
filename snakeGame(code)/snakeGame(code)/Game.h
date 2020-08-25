@@ -12,7 +12,7 @@
 class Game
 {
 private:
-
+	void Check_Wall_collision();
 public:
 	void Init();
 	void update();

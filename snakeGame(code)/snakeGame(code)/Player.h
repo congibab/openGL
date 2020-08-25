@@ -25,6 +25,7 @@ public:
 
 	Vector2D GetPos() { return pos; };
 	Vector2D Gettemp_pos() { return temp_pos; };
-	Vector2D SetPos(Vector2D position) { pos = position; };
+	Vector2D GetDir() { return Direction; };
+	void SetPos(Vector2D position) { pos = position; };
 };
 
