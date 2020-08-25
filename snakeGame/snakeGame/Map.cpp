@@ -1,5 +1,35 @@
 #include "Map.h"
+#include "player.h"
 
+
+
+//void Map::main()
+//{
+//	player _player;
+//	Vector2D player_pos = _player.GetplayerPos();
+//
+//	void Init();
+//	
+//	for (int i = 0; i < column; i++)
+//	{
+//		for (int j = 0; j < row; j++)
+//		{
+//			if (player_pos.x == i || player_pos.y == j)
+//			{
+//				stage[i][j] = 2;
+//			}
+//			
+//			else
+//			{
+//				stage[i][j] = 0;
+//			}
+//		}
+//	}
+//}
+
+/// <summary>
+/// 0 = field 1 = Wall  2 = player
+/// </summary>
 void Map::Init()
 {
 	for (int i = 0; i < column; i++)
@@ -27,6 +57,8 @@ void Map::Init()
 /// <param name="row"></param>
 void Map::Draw_Grid()
 {
+	
+
 	for (int i = 0; i < column; i++)
 	{
 		for (int j = 0; j < row; j++)
@@ -51,5 +83,15 @@ void Map::Draw_Grid()
 			glEnd();
 		}
 	}
-	glFinish();
 }
+
+int Map::Getrow()
+{
+	return row;
+}
+
+int Map::Getcolumn()
+{
+	return column;
+}
+

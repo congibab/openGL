@@ -77,8 +77,10 @@ void display()
 	
 	stage.Draw_Grid();
 	Player.draw();
-	
+	glutPostRedisplay();
+
 	glPopMatrix();
+	glFinish();
 }
 
 void reshape(GLint w, GLint h)
@@ -120,7 +122,7 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 's':
 	case 'S':
-		_pos.y -= 1.0f;
+		//_pos.y -= 1.0f;
 		_direction = { 0, -1 };
 		break;
 	//--------------------------------
@@ -131,7 +133,6 @@ void keyboard(unsigned char key, int x, int y)
 	default:
 		break;
 	}
-	Player.Setvector2D(_pos);
 	Player.SetDirection(_direction);
 	glutPostRedisplay();
 }
@@ -146,9 +147,18 @@ void Idle()
 
 void Timer(int value)
 {
-	//cout << "test" << endl;
+	////cout << "test" << endl;
+	
 	_pos.x += _direction.x;
 	_pos.y += _direction.y;
+
+	//------------------------------------------------
+	if (_pos.x >= stage.Getcolumn() -1 ) _pos.x = 1;
+	else if (_pos.y >= stage.Getrow() - 1) _pos.y = 1;
+	else if (_pos.x <= 0) _pos.x = stage.Getcolumn() - 2;
+	else if (_pos.y <= 0) _pos.y = stage.Getrow() - 2;
+	//------------------------------------------------
+
 	Player.Setvector2D(_pos);
 	
 	glutPostRedisplay();
@@ -161,9 +171,11 @@ void init()
 	stage.Init();
 
 	glClearColor(0.0, 0.0, 0.0, 0);
-	textureid[0] = texturemanager.CreateTexture("larst.png");
+	/*textureid[0] = texturemanager.CreateTexture("larst.png");
 	textureid[1] = texturemanager.CreateTexture("maitetsu.jpg");
-	textureid[2] = texturemanager.LoadGLTextures("opengl.jpg");
+	textureid[2] = texturemanager.LoadGLTextures("opengl.jpg");*/
+
+
 }
 
 int main(int argc, char *argv[])
