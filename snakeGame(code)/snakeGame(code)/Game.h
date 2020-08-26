@@ -13,6 +13,7 @@ class Game
 {
 private:
 	void Check_Wall_collision();
+	void Check_Item_collision();
 public:
 	void Init();
 	void update();

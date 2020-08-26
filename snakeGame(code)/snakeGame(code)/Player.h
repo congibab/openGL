@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <iostream>
+#include <list>
 
 struct Vector2D
 {
@@ -17,6 +18,9 @@ private:
 	Vector2D pos;
 	Vector2D temp_pos;
 	Vector2D Direction;
+
+	bool chack_Direction(Vector2D Dir);
+	void collision();
 public:
 	void Init(GLint x, GLint y);
 	void update();

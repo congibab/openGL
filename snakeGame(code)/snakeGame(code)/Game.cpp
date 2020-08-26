@@ -1,9 +1,13 @@
+#include <iostream>
+
 #include "Game.h"
 #include "Map.h"
 #include "Player.h"
+#include "Item.h"
 
 Map map;
 Player player;
+Item item;
 
 void Game::Check_Wall_collision()
 {
@@ -16,9 +20,19 @@ void Game::Check_Wall_collision()
 	player.SetPos(temp);
 }
 
+void Game::Check_Item_collision()
+{
+	if (player.GetPos().x == item.Getpos().x &&
+		player.GetPos().y == item.Getpos().y)
+	{
+		item.Respawn();
+	}
+}
+
 void Game::Init()
 {
 	map.Init();
+	item.Init(5, 5);
 	player.Init(10,10);
 }
 
@@ -28,16 +42,17 @@ void Game::update()
 	map.SetStage(player.GetPos(), player_collision);
 	map.SetStage(player.Gettemp_pos(), field_collision);
 
-	Check_Wall_collision();
+	Check_Item_collision();
 
 	map.update();
+	item.update();
 	player.update();
-	//int* _stage = map.GetStage();
 }
 
 void Game::draw()
 {
 	map.draw();
+	item.draw();
 	player.draw();
 }
 
