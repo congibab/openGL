@@ -24,6 +24,8 @@ void Player::collision()
 void Player::Init(GLint x, GLint y)
 {
 	pos = { x, y };
+	v.push_back(pos);
+	test.assign(50, pos);
 	temp_pos = { x, y };
 	Direction = right;
 }
@@ -32,8 +34,35 @@ void Player::update()
 {
 	collision();
 	temp_pos = pos;
+	
+/*	v.insert(v.begin(), v.back());
+	v.pop_back();*/	
+
+	v.insert(v.begin(), pos);
+	v.pop_back();
+
+	/*index++;
+	index %= 50;
+	test[index] = temp_pos;*/
+
+
+	//
 	pos.x += Direction.x;
 	pos.y += Direction.y;
+	//
+	
+	//for (int i = 0; i < v.size(); i++)
+	//{
+	//	//v[i] = temp_pos;
+	//	//test[i] = temp_pos;
+	//	std::cout << "(" << v[i].x << "," << v[i].y << ")";
+	//}
+	std::cout << std::endl;
+	/*std::cout << v.front().x << std::endl;
+	std::cout << v.back().x << std::endl;
+	std::cout << v.size() << std::endl;*/
+
+
 }
 
 void Player::draw()
@@ -46,13 +75,17 @@ void Player::draw()
 	glVertex2d(pos.x + 0.5, pos.y + 0.5);
 	glEnd();
 
-	glColor3d(0.5, 0.5, 0.5);
-	glBegin(GL_POLYGON);
-	glVertex2d(temp_pos.x - 0.5, temp_pos.y + 0.5);
-	glVertex2d(temp_pos.x - 0.5, temp_pos.y - 0.5);
-	glVertex2d(temp_pos.x + 0.5, temp_pos.y - 0.5);
-	glVertex2d(temp_pos.x + 0.5, temp_pos.y + 0.5);
-	glEnd();
+	for (int i = 0; i < v.size(); i++)
+	{
+		glColor3d(0.5, 0.0, 0.5);
+		glBegin(GL_POLYGON);
+		glVertex2d(v[i].x - 0.5, v[i].y + 0.5);
+		glVertex2d(v[i].x - 0.5, v[i].y - 0.5);
+		glVertex2d(v[i].x + 0.5, v[i].y - 0.5);
+		glVertex2d(v[i].x + 0.5, v[i].y + 0.5);
+		glEnd();
+	}
+
 }
 
 void Player::Input(unsigned char key, int x, int y)
@@ -88,4 +121,10 @@ void Player::Input(unsigned char key, int x, int y)
 	default:
 		break;
 	}
+}
+
+void Player::push_back()
+{
+	v.push_back(temp_pos);
+	//std::cout << "v.size = " << v.size() << std::endl;
 }

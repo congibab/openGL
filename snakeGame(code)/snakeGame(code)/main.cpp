@@ -16,6 +16,16 @@ void reshapeFunc(GLint w, GLint h);
 void displayFunc();
 void keyboardFunc(unsigned char key, int x, int y);
 
+void render_string(float x, float y, float z, const char* str) {
+	glRasterPos3f(x, y, z);
+
+	const char* c = str;
+	while (*c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
+	}
+}
+
+
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
@@ -50,6 +60,7 @@ void updateFunce(int value)
 {
 	game.update();
 	glutTimerFunc(1000/10, updateFunce, 0);
+
 }
 
 void reshapeFunc(GLint w, GLint h)
@@ -69,6 +80,7 @@ void displayFunc()
 	glPushMatrix();
 	glTranslatef(0.3f, 0.3f, 0.0f);
 	game.draw();
+
 	glPopMatrix();
 	glFinish();
 }

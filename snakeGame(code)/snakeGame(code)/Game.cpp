@@ -26,6 +26,7 @@ void Game::Check_Item_collision()
 		player.GetPos().y == item.Getpos().y)
 	{
 		item.Respawn();
+		player.push_back();
 	}
 }
 
@@ -34,14 +35,13 @@ void Game::Init()
 	map.Init();
 	item.Init(5, 5);
 	player.Init(10,10);
+	
 }
 
 void Game::update()
 {
 
 	map.SetStage(player.GetPos(), player_collision);
-	map.SetStage(player.Gettemp_pos(), field_collision);
-
 	Check_Item_collision();
 
 	map.update();
