@@ -1,4 +1,4 @@
-#include <glm/vec3.hpp>
+﻿#include <glm/vec3.hpp>
 #include <glm/geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
@@ -16,13 +16,30 @@ void reshapeFunc(GLint w, GLint h);
 void displayFunc();
 void keyboardFunc(unsigned char key, int x, int y);
 
-void render_string(float x, float y, float z, const char* str) {
-	glRasterPos3f(x, y, z);
+static void DrawString(string str, int w, int h, int x0, int y0)
+{
+	glDisable(GL_LIGHTING);
+	// 平行投影にする
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, w, h, 0);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
 
-	const char* c = str;
-	while (*c) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
+	// 画面上にテキスト描画
+	glRasterPos2f(x0, y0);
+	int size = (int)str.size();
+	for (int i = 0; i < size; ++i) {
+		char ic = str[i];
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ic);
 	}
+
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 }
 
 
@@ -65,17 +82,18 @@ void updateFunce(int value)
 
 void reshapeFunc(GLint w, GLint h)
 {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0.0, w / 25, 0.0, h / 25, -1.0, 1.0);
+
 
 	cout << "width:" << w << " height:" << h << endl;
 }
 
 void displayFunc()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix();
 	glTranslatef(0.3f, 0.3f, 0.0f);
@@ -83,6 +101,12 @@ void displayFunc()
 
 	glPopMatrix();
 	glFinish();
+
+	glColor3d(1, 0.5, 1);
+	glRasterPos2d(10, 10);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, reinterpret_cast<const unsigned char*>("HELLO"));
+	glutSwapBuffers();
+
 }
 
 void keyboardFunc(unsigned char key, int x, int y)

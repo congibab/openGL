@@ -54,6 +54,8 @@ void Game::draw()
 	map.draw();
 	item.draw();
 	player.draw();
+
+
 }
 
 void Game::Input(unsigned char key, int x, int y)

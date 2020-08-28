@@ -58,9 +58,9 @@ void Player::update()
 	//	std::cout << "(" << v[i].x << "," << v[i].y << ")";
 	//}
 	std::cout << std::endl;
-	/*std::cout << v.front().x << std::endl;
-	std::cout << v.back().x << std::endl;
-	std::cout << v.size() << std::endl;*/
+	//std::cout << v.front().x << std::endl;
+	//std::cout << v.back().x << std::endl;
+	std::cout << v.size() << std::endl;
 
 
 }
