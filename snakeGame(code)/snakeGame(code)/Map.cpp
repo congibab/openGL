@@ -3,21 +3,7 @@
 
 void Map::Init()
 {
-	for (int j = 0; j < column; j++)
-	{
-		for (int i = 0; i < row; i++)
-		{
-			if (i == 0 || i == (row - 1) ||
-				j == 0 || j == (column - 1))
-			{
-				stage[i][j] = 1;
-			}
-			else
-			{
-				stage[i][j] = 0;
-			}
-		}
-	}
+	
 }
 
 void Map::update()
@@ -52,21 +38,3 @@ void Map::draw()
 		}
 	}
 }
-
-int* Map::GetStage()
-{
-	int arr[column][row];
-	
-	for (int j = 0; j < column; j++)
-	{
-		for (int i = 0; i < row; i++)
-		{
-			arr[i][j] = stage[i][j];
-		}
-	}
-
-	return (int*)arr;
-}
-//
-//static int arr[3][3] = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
-//return (int*)arr;

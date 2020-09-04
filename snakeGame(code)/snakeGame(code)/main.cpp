@@ -1,9 +1,4 @@
-﻿#include <glm/vec3.hpp>
-#include <glm/geometric.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/glm.hpp>
-
-#include "Game.h"
+﻿#include "Game.h"
 
 using namespace std;
 
@@ -48,7 +43,7 @@ int main(int argc, char* argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB);
 	glutInitWindowPosition(1200, 100);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(700, 700);
 	glutCreateWindow("Snake Game");
 	init();
 	glutDisplayFunc(displayFunc);
@@ -85,7 +80,7 @@ void reshapeFunc(GLint w, GLint h)
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, w / 25, 0.0, h / 25, -1.0, 1.0);
+	glOrtho(0.0, w , 0.0, h , -1.0, 1.0);
 
 
 	cout << "width:" << w << " height:" << h << endl;
@@ -96,9 +91,9 @@ void displayFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix();
-	glTranslatef(0.3f, 0.3f, 0.0f);
+	glTranslatef(100.0f, 0.0f, 0.0f);
+	glScalef(20, 20, 20);
 	game.draw();
-
 	glPopMatrix();
 	glFinish();
 

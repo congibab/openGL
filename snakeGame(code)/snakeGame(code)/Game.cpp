@@ -41,7 +41,6 @@ void Game::Init()
 void Game::update()
 {
 
-	map.SetStage(player.GetPos(), player_collision);
 	Check_Item_collision();
 
 	map.update();

@@ -1,197 +1,130 @@
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-#include <glm/glm.hpp>
-#include <FreeImage.h>
-#include <iostream>
-#include <glm/vec3.hpp>
-#include <glm/geometric.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/glm.hpp>
+﻿#include <iostream>
+#include <gl/freeglut.h>
 
-#include "TextureManager.h"
-#include "Map.h"
-#include "player.h"
+//---------- プロトタイプ宣言 ---------------------//
+void display();
+void reshape(int w, int h);
+void timer(int value);
+void DRAW_XYZ();
+void DRAW_TRI();
 
-using namespace std;
-
-Vector2D _pos = {5, 5};
-Vector2D _direction = { 1, 0 };
-
-TextureManager texturemanager;
-player Player;
-Map stage;
-
-//GLfloat camera_x = 0;
-//GLfloat camera_y = 0;
-
-GLuint textureid[10];
+//フォント
+void* font = GLUT_BITMAP_HELVETICA_18;
 
 
-const GLfloat vertex[] = {
-	0 , 0 , 
-	0 , 10 , 
-	10 , 10,
-	10 , 0
-};
 
-const GLfloat tex[] =
+//------------- OpenGLの初期設定 ----------------//
+void GLUT_INIT()
 {
-	0, 0,
-	0, 1,
-	1, 1,
-	1, 0
-};
-
-void display()
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	//glRotatef(0.1, 0.1, 0.1, 0);
-	//glVertexPointer(2, GL_FLOAT, 0, vertex);
-	//glTexCoordPointer(2, GL_FLOAT, 0, tex);
-
-	//glEnable(GL_TEXTURE_2D);
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	//glBindTexture(GL_TEXTURE_2D, textureid[0]);
-	//glDrawArrays(GL_POLYGON, 0, 4);
-	//
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	//glDisable(GL_TEXTURE_2D);
-
-	/*glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureid[0]);
-	glBegin(GL_POLYGON);
-	glTexCoord2f(0, 0); glVertex2d(10, 10);
-	glTexCoord2f(0, 1); glVertex2d(10, 20);
-	glTexCoord2f(1, 1); glVertex2d(20, 20);
-	glTexCoord2f(1, 0); glVertex2d(20, 10);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
-	glEnd();*/
-
-	glPushMatrix();
-	glTranslatef(0.3f, 0.3f, 0.0f);
-	
-	stage.Draw_Grid();
-	Player.draw();
-	glutPostRedisplay();
-
-	glPopMatrix();
-	glFinish();
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitWindowSize(640, 480);
+	glutCreateWindow("BitmapString Font");
 }
 
-void reshape(GLint w, GLint h)
+void GLUT_CALL_FUNC()
 {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0.0, w / 25, 0.0, h / 25, -1.0, 1.0);
-	//glOrtho(-w / 50.0, w / 50.0, -h / 50.0, h / 50.0, -1.0, 1.0);
-
-	cout << "width:" << w << " height:" << h << endl;
-
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutTimerFunc(0, timer, 17);
 }
 
-void keyboard(unsigned char key, int x, int y)
+void MY_INIT()
 {
-	switch (key)
-	{
-	case 'q':
-	case 'Q':
-		cout << "Input key q" << endl;
-		
-		break;
-	//================================
-	case 'a':
-	case 'A':
-		//_pos.x -= 1.0f;
-		_direction = {-1, 0};
-		break;
-	case 'd':
-	case 'D':
-		//_pos.x += 1.0f;
-		_direction = { 1, 0 };
-		break;
-	case 'w':
-	case 'W':
-		//_pos.y += 1.0f;
-		_direction = { 0, 1 };
-		break;
-	case 's':
-	case 'S':
-		//_pos.y -= 1.0f;
-		_direction = { 0, -1 };
-		break;
-	//--------------------------------
-	case 27:
-		cout << "Input key Esc" << endl;
-		exit(0);
-		break;
-	default:
-		break;
-	}
-	Player.SetDirection(_direction);
-	glutPostRedisplay();
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glEnable(GL_DEPTH_TEST);  //Zバッファ有効化
 }
 
-/// <summary>
-/// 
-/// </summary>
-void Idle()
-{
-	//glutPostRedisplay();
-}
 
-void Timer(int value)
-{
-	////cout << "test" << endl;
-	
-	_pos.x += _direction.x;
-	_pos.y += _direction.y;
-
-	//------------------------------------------------
-	if (_pos.x >= stage.Getcolumn() -1 ) _pos.x = 1;
-	else if (_pos.y >= stage.Getrow() - 1) _pos.y = 1;
-	else if (_pos.x <= 0) _pos.x = stage.Getcolumn() - 2;
-	else if (_pos.y <= 0) _pos.y = stage.Getrow() - 2;
-	//------------------------------------------------
-
-	Player.Setvector2D(_pos);
-	
-	glutPostRedisplay();
-	glutTimerFunc(100, Timer, 0);
-}
-
-void init()
-{
-	Player.Init(_pos.x, _pos.y);
-	stage.Init();
-
-	glClearColor(0.0, 0.0, 0.0, 0);
-	/*textureid[0] = texturemanager.CreateTexture("larst.png");
-	textureid[1] = texturemanager.CreateTexture("maitetsu.jpg");
-	textureid[2] = texturemanager.LoadGLTextures("opengl.jpg");*/
-}
-
-int main(int argc, char *argv[])
+//------------ メイン関数 ---------------//
+int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB);
-	glutInitWindowPosition(1200, 100);
-	glutInitWindowSize(500,500);
-	glutCreateWindow("Snake Game");
-	init();
 
-	glutDisplayFunc(display);
-	glutIdleFunc(Idle);
-	glutKeyboardFunc(keyboard);
-	glutReshapeFunc(reshape);
-	glutTimerFunc(100, Timer, 0);
-	
+	GLUT_INIT();
+	GLUT_CALL_FUNC();
+	MY_INIT();
+
 	glutMainLoop();
 
 	return 0;
+}
+
+//------------ ここからコールバック ---------------//
+void display()
+{
+	static int r = 0;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	DRAW_XYZ();  //XYZ軸の描画
+
+	//ポリゴンの描画
+	glColor3d(0, 1, 0);
+	glPushMatrix();
+	glRotated(double(r), 0.0, 1.0, 0.0);
+	glTranslated(0.8, 0, 0);
+	DRAW_TRI();
+	glPopMatrix();
+
+
+	glColor3d(1, 0, 1);
+	glRasterPos2d(0, 0);
+	glutBitmapString(font, reinterpret_cast<const unsigned char*>("Hello Free glut Font"));
+
+	glColor3d(1, 1, 1);
+
+	glutSwapBuffers();
+
+	if (++r > 360) {
+		r = 0;
+	}
+}
+
+void reshape(int w, int h)
+{
+	glViewport(0, 0, w, h);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(30.0, (double)w / (double)h, 1.0, 100.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+}
+
+void timer(int t)
+{
+	glutPostRedisplay();
+	glutTimerFunc(t, timer, 17); //タイマー関数
+}
+
+//------------- ここから各種関数 ------------------//
+void DRAW_XYZ()
+{
+	glBegin(GL_LINES);
+
+	glColor3d(0, 1, 0);//x
+	glVertex2d(-100, 0);
+	glVertex2d(100, 0);
+
+	glColor3d(1, 0, 0);//y
+	glVertex2d(0, 0);
+	glVertex2d(0, 100);
+
+	glColor3d(0, 0, 1);//z
+	glVertex3d(0, 0, -100);
+	glVertex3d(0, 0, 100);
+	glEnd();
+
+}
+
+void DRAW_TRI()
+{
+	glBegin(GL_TRIANGLES);
+	glVertex2d(0, 1);
+	glVertex2d(-0.5, 0);
+	glVertex2d(0.5, 0);
+	glEnd();
 }

@@ -5,8 +5,8 @@
 
 #include "player.h"
 
-#define column 20
-#define row 20
+#define column 30
+#define row 30
 
 #define wall_collision 1
 #define player_collision 2
@@ -21,12 +21,6 @@ public:
 	void Init();
 	void update();
 	void draw();
-	
-	int* GetStage();
-	
-	void SetStage(Vector2D pos, int collision) 
-	{
-		stage[pos.x][pos.y] = collision;
-	};
+
 };
 

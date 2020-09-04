@@ -20,7 +20,6 @@ private:
 	Vector2D temp_pos;
 	Vector2D Direction;
 	std::vector<Vector2D> v;
-	std::vector<Vector2D> test;
 	int index = 0;
 
 	bool chack_Direction(Vector2D Dir);
