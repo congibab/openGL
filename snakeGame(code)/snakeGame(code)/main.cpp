@@ -3,6 +3,8 @@
 using namespace std;
 
 Game game;
+int Width;
+int Height;
 
 void init();
 void TimerFunc(int value);
@@ -14,7 +16,7 @@ void keyboardFunc(unsigned char key, int x, int y);
 static void DrawString(string str, int w, int h, int x0, int y0)
 {
 	glDisable(GL_LIGHTING);
-	// 平行投影にする
+
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -23,7 +25,6 @@ static void DrawString(string str, int w, int h, int x0, int y0)
 	glPushMatrix();
 	glLoadIdentity();
 
-	// 画面上にテキスト描画
 	glRasterPos2f(x0, y0);
 	int size = (int)str.size();
 	for (int i = 0; i < size; ++i) {
@@ -81,7 +82,8 @@ void reshapeFunc(GLint w, GLint h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0.0, w , 0.0, h , -1.0, 1.0);
-
+	Width = w;
+	Height = h;
 
 	cout << "width:" << w << " height:" << h << endl;
 }
@@ -89,7 +91,7 @@ void reshapeFunc(GLint w, GLint h)
 void displayFunc()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	string fonts = "tst";
 	glPushMatrix();
 	glTranslatef(100.0f, 0.0f, 0.0f);
 	glScalef(20, 20, 20);
@@ -98,8 +100,8 @@ void displayFunc()
 	glFinish();
 
 	glColor3d(1, 0.5, 1);
-	glRasterPos2d(10, 10);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, reinterpret_cast<const unsigned char*>("HELLO"));
+	//glRasterPos2d(10, 10);
+	DrawString(game.Get_UIMassage(), Width, Height  , Width/2, Height/8);
 	glutSwapBuffers();
 
 }

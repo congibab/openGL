@@ -23,13 +23,14 @@ private:
 	int index = 0;
 
 	bool chack_Direction(Vector2D Dir);
-	void collision();
+
 public:
 	void Init(GLint x, GLint y);
 	void update();
 	void draw();
 	void Input(unsigned char key, int x, int y);
 	void push_back();
+	bool collision();
 
 	Vector2D GetPos() { return pos; };
 	Vector2D Gettemp_pos() { return temp_pos; };

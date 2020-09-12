@@ -9,29 +9,24 @@ Map map;
 Player player;
 Item item;
 
-void Game::Check_Wall_collision()
-{
-	Vector2D temp = player.GetPos();
-	Vector2D test = player.GetDir();
-	if (temp.x > column - 3 && test.x == 1) temp.x = 0;
-	else if (temp.y > row - 3 && test.y == 1) temp.y = 0;
-	else if (temp.x < 2 && test.x == -1) temp.x = column - 1;
-	else if (temp.y < 2 && test.y == -1) temp.y = row - 1;
-	player.SetPos(temp);
-}
-
-void Game::Check_Item_collision()
+bool Game::Check_Item_collision()
 {
 	if (player.GetPos().x == item.Getpos().x &&
 		player.GetPos().y == item.Getpos().y)
 	{
 		item.Respawn();
 		player.push_back();
+		count++;
+		return true;
 	}
+	return false;
 }
 
 void Game::Init()
 {
+	count = 0;
+	GameOver = false;
+	UIMassage = "GamePlaying";
 	map.Init();
 	item.Init(5, 5);
 	player.Init(10,10);
@@ -40,12 +35,18 @@ void Game::Init()
 
 void Game::update()
 {
+	if (GameOver) return;
 
-	Check_Item_collision();
-
+	if(Check_Item_collision()) UIMassage = "Get Item = " + std::to_string(count);
 	map.update();
 	item.update();
 	player.update();
+
+	if (player.collision())
+	{
+		UIMassage = "GameOver";
+		GameOver = true;
+	}
 }
 
 void Game::draw()
@@ -53,11 +54,17 @@ void Game::draw()
 	map.draw();
 	item.draw();
 	player.draw();
-
-
 }
 
 void Game::Input(unsigned char key, int x, int y)
 {
-	player.Input(key, x, y);
+	if (GameOver)
+	{
+		Init();
+	}
+	
+	else
+	{
+		player.Input(key, x, y);
+	}	
 }

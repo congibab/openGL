@@ -13,35 +13,32 @@ bool Player::chack_Direction(Vector2D Dir)
 	return true;
 }
 
-void Player::collision()
+bool Player::collision()
 {
-	//if (pos.x > column - 3 && Direction.x == 1) pos.x = 0;
-	//else if (pos.y > row - 3 && Direction.y == 1) pos.y = 0;
-	//else if (pos.x < 2 && Direction.x == -1) pos.x = column - 1;
-	//else if (pos.y < 2 && Direction.y == -1) pos.y = row - 1;
-
-	if (pos.x > column - 3 && Direction.x == 1) std::cout << "GameOver=(wall)";
-	else if (pos.y > row - 3 && Direction.y == 1) std::cout << "GameOver=(wall)";
-	else if (pos.x < 2 && Direction.x == -1) std::cout << "GameOver=(wall)";
-	else if (pos.y < 2 && Direction.y == -1) std::cout << "GameOver=(wall)";
+	
+	if (pos.x > column - 3 && Direction.x == 1) return true;
+	else if (pos.y > row - 3 && Direction.y == 1) return true;
+	else if (pos.x < 2 && Direction.x == -1) return true;
+	else if (pos.y < 2 && Direction.y == -1) return true;
 
 	for (int i = 0; i < v.size(); i++)
 	{
-		if (pos.x == v[i].x && pos.y == v[i].y) std::cout << "GameOver=(Player)" << std::endl;
-
+		if (pos.x == v[i].x && pos.y == v[i].y) return true;
 	}
+	return false;
 }
 
 void Player::Init(GLint x, GLint y)
 {
 	pos = { x, y };
-	v.push_back(temp_pos);
+	//v.push_back(temp_pos);
 	temp_pos = { x, y };
 	Direction = right;
+	v.clear();
 }
 void Player::update()
 {
-	collision();
+	//collision();
 	temp_pos = pos;
 	
 	v.insert(v.begin(), pos);
